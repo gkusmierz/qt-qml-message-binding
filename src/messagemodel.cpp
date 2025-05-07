@@ -51,4 +51,8 @@ void MessageModel::random()
 
     // set random progress between 0.0 and 1.0
     m_messages[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
+
+    // emit dataChanged signal to notify the view
+    QModelIndex modelIndex = this->index(index);
+    emit dataChanged(modelIndex, modelIndex, { ProgressRole });
 }
