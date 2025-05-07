@@ -16,12 +16,15 @@ ApplicationWindow {
     Rectangle {
         anchors.fill: parent
         anchors.margins: 10
+        color: "white"
+        border.width: 0
 
         RowLayout {
             id: toolbarRow
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+            z: 1
 
             TextField {
                 id: inputField
@@ -64,6 +67,12 @@ ApplicationWindow {
                 delegateAuthor: model.author
                 delegateText: model.text
                 delegateProgress: model.progress
+                Rectangle {
+                    height: 50
+                    width: Math.max(0, Math.min(1, delegateProgress)) * listView.width
+                    opacity: 0.5
+                    color: "red"
+                }
             }
         }
     }

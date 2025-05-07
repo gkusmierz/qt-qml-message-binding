@@ -9,9 +9,7 @@ Rectangle {
 
     width: parent.width
     height: 50
-    color: "lightgray"
-    border.width: 1
-    border.color: "gray"
+    color: "white"
     
     RowLayout {
         spacing: 10
@@ -25,8 +23,8 @@ Rectangle {
             Layout.fillWidth: true
         }
         Text {
-            text: delegateProgress
-            //visible: progress > 0
+            // format the progress as a percentage
+            text: Math.round(delegateProgress * 100) + "%"
         }
     }
 }
