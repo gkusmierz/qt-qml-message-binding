@@ -13,7 +13,8 @@ class MessageModel : public QAbstractListModel {
 public:
     enum MessageRoles {
         AuthorRole = Qt::UserRole + 1,
-        TextRole
+        TextRole,
+        ProgressRole
     };
 
     explicit MessageModel(QObject *parent = nullptr);
@@ -24,6 +25,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void addMessage(const QString &author, const QString &text);
+    Q_INVOKABLE void random();
 
 private:
     QList<QSharedPointer<Message>> m_messages;

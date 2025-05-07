@@ -18,7 +18,7 @@ ApplicationWindow {
         anchors.margins: 10
 
         RowLayout {
-            id: inputRow
+            id: toolbarRow
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -43,6 +43,12 @@ ApplicationWindow {
                     }
                 }
             }
+            Button {
+                text: "Random"
+                onClicked: {
+                    messageModel.random();
+                }
+            }
         }
 
         ListView {
@@ -50,22 +56,14 @@ ApplicationWindow {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.bottom: inputRow.top
+            anchors.bottom: toolbarRow.top
             height: parent.height - 100
             model: messageModel
-            delegate: Rectangle {
-                width: parent.width
-                height: 50
-                color: "lightgray"
-                border.width: 1
-                border.color: "gray"
-
-                Row {
-                    spacing: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    Text { text: "[" + model.author + "]:"; font.bold: true }
-                    Text { text: model.text }
-                }
+            spacing: 5
+            delegate: MessageDelegate {
+                delegateAuthor: model.author
+                delegateText: model.text
+                delegateProgress: model.progress
             }
         }
     }
