@@ -33,6 +33,7 @@ ApplicationWindow {
                         addMessage(text);
                     }
                 }
+                focus: true
             }
             Button {
                 text: "Send"
