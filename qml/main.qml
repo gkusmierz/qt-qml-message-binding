@@ -8,6 +8,11 @@ ApplicationWindow {
     height: 400
     title: "Message Model Example"
 
+    function addMessage(inputText) {
+        messageModel.addMessage("User", inputText)
+        inputField.text = ""
+    }
+
     Rectangle {
         anchors.fill: parent
         anchors.margins: 10
@@ -22,13 +27,18 @@ ApplicationWindow {
                 id: inputField
                 placeholderText: "Enter a message"
                 Layout.fillWidth: true
+
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Return && text.length > 0) {
+                        addMessage(text);
+                    }
+                }
             }
             Button {
                 text: "Send"
                 onClicked: {
                     if (inputField.text.length > 0) {
-                        messageModel.addMessage("User", inputField.text)
-                        inputField.text = ""
+                        addMessage(inputField.text)
                     }
                 }
             }
@@ -36,7 +46,7 @@ ApplicationWindow {
 
         ListView {
             id: listView
-            anchors.top: input.top
+            anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: inputRow.top
@@ -52,8 +62,8 @@ ApplicationWindow {
                 Row {
                     spacing: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    Text { text: "[" + author + "]:"; font.bold: true }
-                    Text { text: text }
+                    Text { text: "[" + model.author + "]:"; font.bold: true }
+                    Text { text: model.text }
                 }
             }
         }

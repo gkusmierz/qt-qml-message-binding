@@ -1,1 +1,2 @@
-# qt-qml-template
+# qt-qml-message-binding
+
