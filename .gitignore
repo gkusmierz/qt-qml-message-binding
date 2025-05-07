@@ -55,3 +55,7 @@ compile_commands.json
 
 # Custom ignores
 build/
+.qtc_clangd/
+qt-qml-message-binding.app /
+
+

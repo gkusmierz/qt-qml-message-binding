@@ -1,16 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QSettings>
+#include <QQmlContext>
 
-#include "iconprovider.h"
+#include "messagemodel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    // Set the application icon provider
-    engine.addImageProvider("icon", new IconProvider(":/MaterialIconsSharp-Regular.otf", ":/MaterialIconsSharp-Regular.codepoints"));
+    MessageModel model;
+    engine.rootContext()->setContextProperty("messageModel", &model);
 
     // Load the main qml file
     const QUrl url("qrc:/main.qml");
