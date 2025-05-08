@@ -80,6 +80,7 @@ ApplicationWindow {
             delegate: MessageDelegate {
                 delegateAuthor: model.author
                 delegateText: model.text
+                delegateColor: model.color
                 delegateProgress: model.progress
                 width: listView.width
             }
