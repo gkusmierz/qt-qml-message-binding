@@ -47,6 +47,12 @@ ApplicationWindow {
                 delegateColor: model.color
                 delegateProgress: model.progress
                 width: listView.width
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        messageModel.random(model.index);
+                    }
+                }
             }
             ScrollBar.vertical: ScrollBar {
                 id: scrollBar
