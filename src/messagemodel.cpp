@@ -46,7 +46,7 @@ void MessageModel::addMessage(const QString &author, const QString &text) {
     endInsertRows();
 }
 
-void MessageModel::random()
+void MessageModel::randomProgress()
 {
     // select randomly on of items from m_messages
     if (m_messages.isEmpty()) return;
@@ -55,11 +55,22 @@ void MessageModel::random()
     // set random progress between 0.0 and 1.0
     m_messages[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
 
+    // emit dataChanged signal to notify the view
+    QModelIndex modelIndex = this->index(index);
+    emit dataChanged(modelIndex, modelIndex, { ProgressRole });
+}
+
+void MessageModel::randomColor()
+{
+    // select randomly on of items from m_messages
+    if (m_messages.isEmpty()) return;
+    int index = rand() % m_messages.size();
+
     // set random color
     QColor randomColor(rand() % 256, rand() % 256, rand() % 256);
     m_messages[index]->setColor(randomColor);
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex, { ColorRole, ProgressRole });
+    emit dataChanged(modelIndex, modelIndex, { ColorRole });
 }

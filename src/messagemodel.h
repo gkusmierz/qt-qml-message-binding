@@ -26,7 +26,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void addMessage(const QString &author, const QString &text);
-    Q_INVOKABLE void random();
+    Q_INVOKABLE void randomProgress();
+    Q_INVOKABLE void randomColor();
 
 private:
     QList<QSharedPointer<Message>> m_messages;
