@@ -3,5 +3,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>main.qml</file>
         <file>MessageDelegate.qml</file>
+        <file>MessageToolbar.qml</file>
     </qresource>
 </RCC>

@@ -5,8 +5,8 @@ import QtQuick.Controls.Universal
 
 ApplicationWindow {
     visible: true
-    width: 360
-    height: 400
+    width: 600
+    height: 600
     title: "Message Model Example"
 
     background: Rectangle {
@@ -16,7 +16,7 @@ ApplicationWindow {
 
     function addMessage(inputText) {
         messageModel.addMessage("User", inputText, )
-        inputField.text = ""
+        toolbarRow.blah = ""
     }
 
     Rectangle {
@@ -25,45 +25,8 @@ ApplicationWindow {
         color: "#151515"
         border.width: 0
 
-        RowLayout {
+        MessageToolbar {
             id: toolbarRow
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.margins: 8
-            height: 40
-            spacing: 5
-            z: 1
-
-            TextField {
-                id: inputField
-                placeholderText: "Enter a message"
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Return && text.length > 0) {
-                        addMessage(text);
-                    }
-                }
-                focus: true
-            }
-            Button {
-                text: "Send"
-                onClicked: {
-                    if (inputField.text.length > 0) {
-                        addMessage(inputField.text)
-                    }
-                }
-                Layout.fillHeight: true
-            }
-            Button {
-                text: "Random"
-                onClicked: {
-                    messageModel.random();
-                }
-                Layout.fillHeight: true
-            }
         }
 
         ListView {
@@ -73,6 +36,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.bottom: toolbarRow.top
             anchors.margins: 8
+            boundsBehavior: ListView.StopAtBounds
             height: parent.height - 100
             model: messageModel
             spacing: 2
@@ -89,6 +53,7 @@ ApplicationWindow {
                 width: 16
                 opacity: 0.5
             }
+
         }
     }
 }

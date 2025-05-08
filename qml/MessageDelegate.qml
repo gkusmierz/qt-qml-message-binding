@@ -34,6 +34,7 @@ Rectangle {
         }
         Text {
             text: delegateText
+            font.bold: true
             font.pixelSize: 16
             Layout.fillWidth: true
             color: Universal.foreground
@@ -41,6 +42,7 @@ Rectangle {
         Text {
             // format the progress as a percentage
             text: Math.round(delegateProgress * 100) + "%"
+            font.bold: true
             font.pixelSize: 16
             color: Universal.foreground
         }
