@@ -22,6 +22,8 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const {
             return msgPtr->author();
         case TextRole:
             return msgPtr->text();
+        case ColorRole:
+            return msgPtr->color();
         case ProgressRole:
             return msgPtr->progress();
         default:
@@ -33,13 +35,14 @@ QHash<int, QByteArray> MessageModel::roleNames() const {
     return {
         { AuthorRole, "author" },
         { TextRole, "text" },
+        { ColorRole, "color" },
         { ProgressRole, "progress" }
     };
 }
 
 void MessageModel::addMessage(const QString &author, const QString &text) {
     beginInsertRows(QModelIndex(), m_messages.size(), m_messages.size());
-    m_messages.append(QSharedPointer<Message>::create(author, text, 0.0, this));
+    m_messages.append(QSharedPointer<Message>::create(author, text, "red", 0.0, this));
     endInsertRows();
 }
 
@@ -52,7 +55,11 @@ void MessageModel::random()
     // set random progress between 0.0 and 1.0
     m_messages[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
 
+    // set random color
+    QColor randomColor(rand() % 256, rand() % 256, rand() % 256);
+    m_messages[index]->setColor(randomColor);
+
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex, { ProgressRole });
+    emit dataChanged(modelIndex, modelIndex, { ColorRole, ProgressRole });
 }

@@ -14,6 +14,7 @@ public:
     enum MessageRoles {
         AuthorRole = Qt::UserRole + 1,
         TextRole,
+        ColorRole,
         ProgressRole
     };
 
