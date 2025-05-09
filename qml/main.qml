@@ -15,7 +15,7 @@ ApplicationWindow {
     }
 
     function addMessage(inputText) {
-        messageModel.addMessage("User", inputText, )
+        playlist.addMessage("User", inputText, )
         toolbarRow.blah = ""
     }
 
@@ -38,7 +38,7 @@ ApplicationWindow {
             anchors.margins: 8
             boundsBehavior: ListView.StopAtBounds
             height: parent.height - 100
-            model: messageModel
+            model: playlist
             spacing: 2
             clip: true
             delegate: MessageDelegate {
@@ -50,7 +50,7 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        messageModel.random(model.index);
+                        playlist.random(model.index);
                     }
                 }
             }

@@ -1,18 +1,18 @@
-#include "messagemodel.h"
+#include "playlistmodel.h"
 
-MessageModel::MessageModel(QObject *parent)
+PlaylistModel::PlaylistModel(QObject *parent)
     : QAbstractListModel(parent) {}
 
-int MessageModel::rowCount(const QModelIndex &parent) const {
+int PlaylistModel::rowCount(const QModelIndex &parent) const {
     if (parent.isValid()) return 0;
     return m_messages.count();
 }
 
-QVariant MessageModel::data(const QModelIndex &index, int role) const {
+QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid() || index.row() < 0 || index.row() >= m_messages.size())
         return QVariant();
 
-    const QSharedPointer<Message> &msgPtr = m_messages[index.row()];
+    const QSharedPointer<PlaylistItem> &msgPtr = m_messages[index.row()];
 
     if (!msgPtr)
         return QVariant();
@@ -31,7 +31,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const {
     }
 }
 
-QHash<int, QByteArray> MessageModel::roleNames() const {
+QHash<int, QByteArray> PlaylistModel::roleNames() const {
     return {
         { AuthorRole, "author" },
         { TextRole, "text" },
@@ -40,13 +40,13 @@ QHash<int, QByteArray> MessageModel::roleNames() const {
     };
 }
 
-void MessageModel::addMessage(const QString &author, const QString &text) {
+void PlaylistModel::addMessage(const QString &author, const QString &text) {
     beginInsertRows(QModelIndex(), m_messages.size(), m_messages.size());
-    m_messages.append(QSharedPointer<Message>::create(author, text, "red", 0.0, this));
+    m_messages.append(QSharedPointer<PlaylistItem>::create(author, text, "red", 0.0, this));
     endInsertRows();
 }
 
-void MessageModel::random(int index)
+void PlaylistModel::random(int index)
 {
     // set random progress between 0.0 and 1.0
     m_messages[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
@@ -60,7 +60,7 @@ void MessageModel::random(int index)
     emit dataChanged(modelIndex, modelIndex, { ColorRole, ProgressRole });
 }
 
-void MessageModel::randomProgress()
+void PlaylistModel::randomProgress()
 {
     // select randomly on of items from m_messages
     if (m_messages.isEmpty()) return;
@@ -74,7 +74,7 @@ void MessageModel::randomProgress()
     emit dataChanged(modelIndex, modelIndex, { ProgressRole });
 }
 
-void MessageModel::randomColor()
+void PlaylistModel::randomColor()
 {
     // select randomly on of items from m_messages
     if (m_messages.isEmpty()) return;

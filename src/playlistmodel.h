@@ -1,24 +1,24 @@
-#ifndef MESSAGEMODEL_H
-#define MESSAGEMODEL_H
+#ifndef PLAYLISTMODEL_H
+#define PLAYLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QSharedPointer>
 #include <QList>
 
-#include "message.h"
+#include "playlistitem.h"
 
-class MessageModel : public QAbstractListModel {
+class PlaylistModel : public QAbstractListModel {
     Q_OBJECT
 
 public:
-    enum MessageRoles {
+    enum PlaylstItemRoles {
         AuthorRole = Qt::UserRole + 1,
         TextRole,
         ColorRole,
         ProgressRole
     };
 
-    explicit MessageModel(QObject *parent = nullptr);
+    explicit PlaylistModel(QObject *parent = nullptr);
 
     // QAbstractListModel overrides
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -31,7 +31,7 @@ public:
     Q_INVOKABLE void randomColor();
 
 private:
-    QList<QSharedPointer<Message>> m_messages;
+    QList<QSharedPointer<PlaylistItem>> m_messages;
 };
 
-#endif // MESSAGEMODEL_H
+#endif // PLAYLISTMODEL_H

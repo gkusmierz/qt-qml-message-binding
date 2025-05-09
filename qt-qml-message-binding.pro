@@ -9,9 +9,9 @@ RESOURCES += \
 
 SOURCES += \
     src/main.cpp \
-    src/message.cpp \
-    src/messagemodel.cpp
+    src/playlistitem.cpp \
+    src/playlistmodel.cpp
 
 HEADERS += \
-    src/message.h \
-    src/messagemodel.h
+    src/playlistitem.h \
+    src/playlistmodel.h

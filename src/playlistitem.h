@@ -1,10 +1,10 @@
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef PLAYLISTITEM_H
+#define PLAYLISTITEM_H
 
 #include <QObject>
 #include <QColor>
 
-class Message : public QObject {
+class PlaylistItem : public QObject {
 
     Q_OBJECT
 
@@ -13,10 +13,10 @@ class Message : public QObject {
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(qreal progress READ progress WRITE setProgress NOTIFY progressChanged)
 public:
-    Message(QObject *parent = nullptr);
-    Message(const QString &author, const QString &text, const QColor &color, const qreal &progress, QObject *parent = nullptr);
+    PlaylistItem(QObject *parent = nullptr);
+    PlaylistItem(const QString &author, const QString &text, const QColor &color, const qreal &progress, QObject *parent = nullptr);
 
-    ~Message() override;
+    ~PlaylistItem() override;
 
     QString author() const;
     void setAuthor(const QString &newAuthor);
@@ -43,4 +43,4 @@ private:
     qreal m_progress;
 };
 
-#endif // MESSAGE_H
+#endif // PLAYLISTITEM_H

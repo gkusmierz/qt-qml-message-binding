@@ -15,6 +15,14 @@ RowLayout {
     height: 45
     spacing: 5
     z: 1
+
+    function contrastColor(color) {
+        var r = color.red() * 255;
+        var g = color.green() * 255;
+        var b = color.blue() * 255;
+        var luma = (0.299 * r + 0.587 * g + 0.114 * b);
+        return luma < 128 ? "white" : "black";
+    }
     
     TextField {
         id: inputField
@@ -38,11 +46,14 @@ RowLayout {
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
+        palette {
+                                          button: "yellow"
+                                      }
     }
     Button {
         text: "Random\nProgress"
         onClicked: {
-            messageModel.randomProgress();
+            playlist.randomProgress();
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
@@ -50,7 +61,7 @@ RowLayout {
     Button {
         text: "Random\nColor"
         onClicked: {
-            messageModel.randomColor();
+            playlist.randomColor();
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
