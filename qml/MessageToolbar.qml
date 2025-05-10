@@ -15,14 +15,6 @@ RowLayout {
     height: 45
     spacing: 5
     z: 1
-
-    function contrastColor(color) {
-        var r = color.red() * 255;
-        var g = color.green() * 255;
-        var b = color.blue() * 255;
-        var luma = (0.299 * r + 0.587 * g + 0.114 * b);
-        return luma < 128 ? "white" : "black";
-    }
     
     TextField {
         id: inputField
