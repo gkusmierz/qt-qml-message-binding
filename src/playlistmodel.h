@@ -12,10 +12,16 @@ class PlaylistModel : public QAbstractListModel {
 
 public:
     enum PlaylstItemRoles {
-        AuthorRole = Qt::UserRole + 1,
-        TextRole,
-        ColorRole,
-        ProgressRole
+        ArtistRole = Qt::UserRole + 1,
+        TitleRole,
+        CueStartRole,
+        CueIntroRole,
+        CueMixRole,
+        CueEndRole,
+        DurationRole,
+        ProgressRole,
+        FileNameRole,
+        ColorRole
     };
 
     explicit PlaylistModel(QObject *parent = nullptr);
@@ -25,13 +31,15 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void addMessage(const QString &author, const QString &text);
+    Q_INVOKABLE void addPlaylistItem(const QString &artist, const QString &title,
+                                     double cueStart, double cueIntro, double cueMix,
+                                     double cueEnd, double duration, const QColor &color);
     Q_INVOKABLE void random(int index);
     Q_INVOKABLE void randomProgress();
     Q_INVOKABLE void randomColor();
 
 private:
-    QList<QSharedPointer<PlaylistItem>> m_messages;
+    QList<QSharedPointer<PlaylistItem>> m_playlistItems;;
 };
 
 #endif // PLAYLISTMODEL_H
