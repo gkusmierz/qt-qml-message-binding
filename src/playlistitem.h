@@ -8,39 +8,73 @@ class PlaylistItem : public QObject {
 
     Q_OBJECT
 
-    Q_PROPERTY(QString author READ author WRITE setAuthor NOTIFY authorChanged)
-    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QString artist READ artist WRITE setArtist NOTIFY artistChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(double cueStart READ cueStart WRITE setCueStart NOTIFY cueStartChanged)
+    Q_PROPERTY(double cueIntro READ cueIntro WRITE setCueIntro NOTIFY cueIntroChanged)
+    Q_PROPERTY(double cueMix READ cueMix WRITE setCueMix NOTIFY cueMixChanged)
+    Q_PROPERTY(double cueEnd READ cueEnd WRITE setCueEnd NOTIFY cueEndChanged)
+    Q_PROPERTY(double duration READ duration WRITE setDuration NOTIFY durationChanged)
+    Q_PROPERTY(double progress READ progress WRITE setProgress NOTIFY progressChanged)
+    Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    Q_PROPERTY(qreal progress READ progress WRITE setProgress NOTIFY progressChanged)
 public:
     PlaylistItem(QObject *parent = nullptr);
-    PlaylistItem(const QString &author, const QString &text, const QColor &color, const qreal &progress, QObject *parent = nullptr);
-
     ~PlaylistItem() override;
 
-    QString author() const;
-    void setAuthor(const QString &newAuthor);
+    QString artist() const;
+    void setArtist(const QString &newArtist);
 
-    QString text() const;
-    void setText(const QString &newText);
+    QString title() const;
+    void setTitle(const QString &newTitle);
+
+    double cueStart() const;
+    void setCueStart(double newCueStart);
+
+    double cueIntro() const;
+    void setCueIntro(double newCueIntro);
+
+    double cueMix() const;
+    void setCueMix(double newCueMix);
+
+    double cueEnd() const;
+    void setCueEnd(double newCueEnd);
+
+    double duration() const;
+    void setDuration(double newDuration);
+
+    double progress() const;
+    void setProgress(double newProgress);
+
+    QString fileName() const;
+    void setFileName(const QString &newFileName);
 
     QColor color() const;
     void setColor(const QColor &newColor);
 
-    qreal progress() const;
-    void setProgress(qreal newProgress);
-
 signals:
-    void authorChanged();
-    void textChanged();
-    void colorChanged();
+    void artistChanged();
+    void titleChanged();
+    void cueStartChanged();
+    void cueIntroChanged();
+    void cueMixChanged();
+    void cueEndChanged();
+    void durationChanged();
     void progressChanged();
+    void fileNameChanged();
+    void colorChanged();
 
 private:
-    QString m_author;
-    QString m_text;
+    QString m_artist;
+    QString m_title;
+    double m_cueStart;
+    double m_cueIntro;
+    double m_cueMix;
+    double m_cueEnd;
+    double m_duration;
+    double m_progress;
+    QString m_fileName;
     QColor m_color;
-    qreal m_progress;
 };
 
 #endif // PLAYLISTITEM_H

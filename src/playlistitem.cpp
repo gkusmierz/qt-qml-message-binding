@@ -4,77 +4,151 @@
 
 PlaylistItem::PlaylistItem(QObject *parent)
     : QObject(parent),
-      m_author(""),
-      m_text(""),
-      m_color(Qt::black),
-      m_progress(0.0)
+      m_artist(""),
+      m_title(""),
+      m_cueStart(0.0),
+      m_cueIntro(0.0),
+      m_cueMix(0.0),
+      m_cueEnd(0.0),
+      m_duration(0.0),
+      m_progress(0.0),
+      m_fileName(""),
+      m_color(Qt::red)
 {
-    qDebug() << "PlaylistItem created()";
-}
-
-PlaylistItem::PlaylistItem(const QString &author, const QString &text, const QColor &color, const qreal &progress, QObject *parent)
-    : QObject(parent),
-      m_author(author),
-      m_text(text),
-      m_color(color),
-      m_progress(progress)
-{
-    qDebug() << "PlaylistItem created(" << m_author << m_text << m_color << m_progress << ")";;
+    qDebug() << "PlaylistItem constructor called";
 }
 
 PlaylistItem::~PlaylistItem()
 {
-    qDebug() << "PlaylistItem destroyed (" << m_author << m_text << m_color << m_progress << ")";
+    qDebug() << "PlaylistItem destructor called";
 }
 
-QString PlaylistItem::author() const {
-    return m_author;
-}
-
-QString PlaylistItem::text() const {
-    return m_text;
-}
-
-void PlaylistItem::setAuthor(const QString &newAuthor)
+QString PlaylistItem::artist() const
 {
-    if (m_author == newAuthor)
-        return;
-
-    m_author = newAuthor;
-    emit authorChanged();
+    return m_artist;
 }
 
-void PlaylistItem::setText(const QString &newText)
+void PlaylistItem::setArtist(const QString &newArtist)
 {
-    if (m_text == newText)
-        return;
-
-    m_text = newText;
-    emit textChanged();
+    if (m_artist != newArtist) {
+        m_artist = newArtist;
+        emit artistChanged();
+    }
 }
 
-QColor PlaylistItem::color() const {
+QString PlaylistItem::title() const
+{
+    return m_title;
+}
+
+void PlaylistItem::setTitle(const QString &newTitle)
+{
+    if (m_title != newTitle) {
+        m_title = newTitle;
+        emit titleChanged();
+    }
+}
+
+double PlaylistItem::cueStart() const
+{
+    return m_cueStart;
+}
+
+void PlaylistItem::setCueStart(double newCueStart)
+{
+    if (m_cueStart != newCueStart) {
+        m_cueStart = newCueStart;
+        emit cueStartChanged();
+    }
+}
+
+double PlaylistItem::cueIntro() const
+{
+    return m_cueIntro;
+}
+
+void PlaylistItem::setCueIntro(double newCueIntro)
+{
+    if (m_cueIntro != newCueIntro) {
+        m_cueIntro = newCueIntro;
+        emit cueIntroChanged();
+    }
+}
+
+double PlaylistItem::cueMix() const
+{
+    return m_cueMix;
+}
+
+void PlaylistItem::setCueMix(double newCueMix)
+{
+    if (m_cueMix != newCueMix) {
+        m_cueMix = newCueMix;
+        emit cueMixChanged();
+    }
+}
+
+double PlaylistItem::cueEnd() const
+{
+    return m_cueEnd;
+}
+
+void PlaylistItem::setCueEnd(double newCueEnd)
+{
+    if (m_cueEnd != newCueEnd) {
+        m_cueEnd = newCueEnd;
+        emit cueEndChanged();
+    }
+}
+
+double PlaylistItem::duration() const
+{
+    return m_duration;
+}
+
+void PlaylistItem::setDuration(double newDuration)
+{
+    if (m_duration != newDuration) {
+        m_duration = newDuration;
+        emit durationChanged();
+    }
+}
+
+double PlaylistItem::progress() const
+{
+    return m_progress;
+}
+
+void PlaylistItem::setProgress(double newProgress)
+{
+    if (m_progress != newProgress) {
+        m_progress = newProgress;
+        emit progressChanged();
+    }
+}
+
+QString PlaylistItem::fileName() const
+{
+    return m_fileName;
+}
+
+void PlaylistItem::setFileName(const QString &newFileName)
+{
+    if (m_fileName != newFileName) {
+        m_fileName = newFileName;
+        emit fileNameChanged();
+    }
+}
+
+QColor PlaylistItem::color() const
+{
     return m_color;
 }
 
 void PlaylistItem::setColor(const QColor &newColor)
 {
-    if (m_color == newColor)
-        return;
-
-    m_color = newColor;
-    emit colorChanged();
-}
-
-qreal PlaylistItem::progress() const {
-    return m_progress;
-}
-
-void PlaylistItem::setProgress(qreal newProgress)
-{
-    if (m_progress == newProgress)
-        return;
-
-    m_progress = newProgress;
-    emit progressChanged();
+    if (m_color != newColor) {
+        m_color = newColor;
+        emit colorChanged();
+    }
 }
