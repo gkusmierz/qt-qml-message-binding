@@ -28,15 +28,15 @@ int LibraryModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant LibraryModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid() || index.row() < 0 || index.row() >= m_libraryItems.size())
+    if (index.row() < 0 || index.row() > m_libraryItems.count())
         return QVariant();
 
-    const QSharedPointer<LibraryItem> &msgPtr = m_libraryItems[index.row()];
+    LibraryItem *msgPtr = m_libraryItems[index.row()];
 
-    QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
-    msgPtr->debug(debugMsg);
+    //QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
+    //msgPtr->debug(debugMsg);
 
-    if (!msgPtr)
+    if (msgPtr == nullptr)
         return QVariant();
 
     switch (role) {
@@ -90,7 +90,7 @@ QObject *LibraryModel::randomItem()
 
 QObject *LibraryModel::getItem(int index) const {
     if (index >= 0 && index < m_libraryItems.size())
-        return m_libraryItems[index].data(); // return raw QObject* for QML
+        return qobject_cast<QObject*>(m_libraryItems[index]); // return raw QObject* for QML
     return nullptr;
 }
 
@@ -127,20 +127,19 @@ void LibraryModel::initModel()
 
     int count = countQuery.value("cnt").toInt();
 
-
     QSqlQuery query(db);
     if (!query.exec("select artist, title, duration from items order by artist, title, duration")) {
         qWarning().noquote() << "Failed to execute query:" << query.lastError().text();
         return;
     }
 
-    beginInsertRows(QModelIndex(), 0, count);
+    beginInsertRows(QModelIndex(), count, count);
     while (query.next()) {
         QString artist = query.value("artist").toString();
         QString title = query.value("title").toString();
         double duration = query.value("duration").toDouble();
 
-        auto item = QSharedPointer<LibraryItem>::create(artist, title, 0.0, 0.0, 0.0, 0.0, duration, "red");
+        auto item = new LibraryItem{artist, title, 0.0, 0.0, 0.0, 0.0, duration, "red"};
         m_libraryItems.append(item);
     }
     endInsertRows();

@@ -21,19 +21,20 @@ int PlaylistModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid() || index.row() < 0 || index.row() >= m_playlistItems.size())
+    if (index.row() < 0 || index.row() > m_playlistItems.count())
         return QVariant();
 
-    const QSharedPointer<PlaylistItem> &msgPtr = m_playlistItems[index.row()];
+    PlaylistItem *msgPtr = m_playlistItems[index.row()];
 
-    QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
-    msgPtr->debug(debugMsg);
+    //QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
+    //msgPtr->debug(debugMsg);
 
-    if (!msgPtr)
+    if (msgPtr == nullptr)
         return QVariant();
 
     switch (role) {
     case PlaylistArtistRole:
+
         return msgPtr->artist();
     case PlaylistTitleRole:
         return msgPtr->title();
@@ -79,8 +80,9 @@ void PlaylistModel::addPlaylistItem(const QString &artist, const QString &title,
 {
     beginInsertRows(QModelIndex(), m_playlistItems.size(), m_playlistItems.size());
 
-    m_playlistItems.append(QSharedPointer<PlaylistItem>::create(
-        artist, title, cueStart, cueIntro, cueMix, cueEnd, duration, "red"));
+    // Create a new PlaylistItem and add it to the list
+    PlaylistItem *item = new PlaylistItem(artist, title, cueStart, cueIntro, cueMix, cueEnd, duration, color);
+    m_playlistItems.append(item);
 
     endInsertRows();
 }

@@ -13,9 +13,24 @@ RowLayout {
     Button {
         text: "Add"
         onClicked: {
-            var randomItem = library.randomItem();
-            console.log(randomItem)
-            playlist.addPlaylistItem(randomItem.artist, randomItem.title, 0.0, 0.0, 0.0, 0.0, randomItem.duration, "red");
+            for (var i = 0; i < 25; i++) {
+
+
+
+                try {
+                    var randomItem = library.randomItem();
+                    console.log(randomItem)
+                    playlist.addPlaylistItem(randomItem.artist, randomItem.title, 0.0, 0.0, 0.0, 0.0, randomItem.duration, "red");
+                } catch (error) {
+                  console.error(error);
+                  // Expected output: ReferenceError: nonExistentFunction is not defined
+                  // (Note: the exact output may be browser-dependent)
+                }
+
+
+
+
+            }
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100

@@ -2,9 +2,7 @@
 #define LIBRARYMODEL_H
 
 #include <QAbstractListModel>
-#include <QObject>
 #include <QSqlDatabase>
-#include <QSharedPointer>
 #include <QList>
 
 #include "libraryitem.h"
@@ -41,7 +39,7 @@ signals:
 
 private:
     QString m_sqlitePath;
-    QList<QSharedPointer<LibraryItem>> m_libraryItems;
+    QList<LibraryItem*> m_libraryItems;
 
     QSqlDatabase openDb(const QString &path, const char *connectionName) const;
     void initModel();
