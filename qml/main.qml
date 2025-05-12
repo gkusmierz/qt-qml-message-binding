@@ -7,7 +7,7 @@ ApplicationWindow {
     visible: true
     width: 600
     height: 600
-    title: "Message Model Example"
+    title: "BLAH!!!"
 
     background: Rectangle {
         color: Universal.background
@@ -25,8 +25,12 @@ ApplicationWindow {
         color: "#151515"
         border.width: 0
 
-        MessageToolbar {
+        MyToolbar {
             id: toolbarRow
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 12
         }
 
         ListView {
@@ -41,9 +45,9 @@ ApplicationWindow {
             model: playlist
             spacing: 2
             clip: true
-            delegate: MessageDelegate {
-                delegateAuthor: model.author
-                delegateText: model.text
+            delegate: PlaylistItemDelegate {
+                artist: model.artist
+                title: model.title
                 delegateColor: model.color
                 delegateProgress: model.progress
                 width: listView.width

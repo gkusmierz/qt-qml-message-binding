@@ -4,8 +4,9 @@ import QtQuick.Layouts
 import QtQuick.Controls.Universal
 
 Rectangle {
-    property string delegateAuthor: ""
-    property string delegateText: ""
+    
+    property string artist: "Some Artist"
+    property string title: "Some title"
     property color delegateColor: "#303030"
     property color contrastColor: getContrastColorFromQColor(delegateColor)
     property real delegateProgress: 0.0
@@ -35,7 +36,7 @@ Rectangle {
             : Qt.rgba(1, 1, 1, 1);
     }
 
-    height: 75
+    height: 80
     color: Qt.darker(delegateColor)
     
     Rectangle {
@@ -52,28 +53,44 @@ Rectangle {
         Item {
             Layout.minimumWidth: 8
         }
-        Text {
-            text: delegateAuthor
-            font.bold: true
-            font.pixelSize: 16
-            color: contrastColor
-        }
-        Text {
-            text: delegateText
-            font.bold: true
-            font.pixelSize: 16
+        ColumnLayout {
             Layout.fillWidth: true
-            color: contrastColor
+            Layout.fillHeight: true
+            Text {
+                id: artistText
+                text: artist
+                font.bold: true
+                font.pixelSize: 24
+                color: contrastColor
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                //Layout.fillHeight: true
+            }
+            Text {
+                id: titleText
+                text: title
+                font.bold: false
+                font.pixelSize: 18
+                color: contrastColor
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                //Layout.fillHeight: true
+            }
         }
+
         Text {
             // format the progress as a percentage
             text: Math.round(delegateProgress * 100) + "%"
             font.bold: true
             font.pixelSize: 16
             color: contrastColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideLeft
         }
         Item {
             Layout.minimumWidth: 8
+            Layout.maximumWidth: 8
         }
     }
 }

@@ -6,34 +6,17 @@ import QtQuick.Controls.Universal
 RowLayout {
     id: toolbarRow
 
-    property alias blah: inputField.text
-
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    anchors.margins: 8
     height: 45
     spacing: 5
     z: 1
     
-    TextField {
-        id: inputField
-        placeholderText: "Enter a message"
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        
-        Keys.onPressed: (event) => {
-                            if (event.key === Qt.Key_Return && text.length > 0) {
-                                addMessage(text);
-                            }
-                        }
-        focus: true
-    }
     Button {
-        text: "Send"
+        text: "Add"
         onClicked: {
-            if (inputField.text.length > 0) {
-                addMessage(inputField.text)
+            for (var i = 1; i < 10; i++) {
+            var randomItem = dao.randomItem();
+            //console.log(randomItem);
+            playlist.addPlaylistItem(randomItem.artist, randomItem.title, 0.0, 0.0, 0.0, 0.0, randomItem.duration, "red");
             }
         }
         Layout.fillHeight: true
@@ -57,5 +40,8 @@ RowLayout {
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
+    }
+    Item {
+        Layout.fillWidth: true
     }
 }
