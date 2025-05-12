@@ -14,6 +14,9 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
 
     const QSharedPointer<PlaylistItem> &msgPtr = m_playlistItems[index.row()];
 
+    QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
+    msgPtr->debug(debugMsg);
+
     if (!msgPtr)
         return QVariant();
 
@@ -64,18 +67,8 @@ void PlaylistModel::addPlaylistItem(const QString &artist, const QString &title,
 {
     beginInsertRows(QModelIndex(), m_playlistItems.size(), m_playlistItems.size());
 
-    PlaylistItem *item = new PlaylistItem(this);
-    item->setArtist(artist);
-    item->setTitle(title);
-    item->setCueStart(cueStart);
-    item->setCueIntro(cueIntro);
-    item->setCueMix(cueMix);
-    item->setCueEnd(cueEnd);
-    item->setDuration(duration);
-    item->setColor(color);
-    item->setProgress(0.0); // Initialize progress to 0.0
-
-    m_playlistItems.append(QSharedPointer<PlaylistItem>::create(item));
+    m_playlistItems.append(QSharedPointer<PlaylistItem>::create(
+        artist, title, cueStart, cueIntro, cueMix, cueEnd, duration, "red"));
 
     endInsertRows();
 }
