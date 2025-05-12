@@ -20,6 +20,11 @@ class PlaylistItem : public QObject {
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 public:
     PlaylistItem(QObject *parent = nullptr);
+    PlaylistItem(const QString &artist, const QString &title,
+                           double cueStart, double cueIntro, double cueMix,
+                           double cueEnd, double duration, const QColor &color,
+                           QObject *parent = nullptr);
+
     ~PlaylistItem() override;
 
     QString artist() const;
@@ -51,6 +56,8 @@ public:
 
     QColor color() const;
     void setColor(const QColor &newColor);
+
+    Q_INVOKABLE void debug(QString message);
 
 signals:
     void artistChanged();

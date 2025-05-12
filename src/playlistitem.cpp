@@ -15,12 +15,31 @@ PlaylistItem::PlaylistItem(QObject *parent)
       m_fileName(""),
       m_color(Qt::red)
 {
-    qDebug() << "PlaylistItem constructor called";
+    qDebug() << "PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+        m_cueMix << m_cueEnd << m_duration << m_color << ")";
+}
+
+PlaylistItem::PlaylistItem(const QString &artist, const QString &title, double cueStart, double cueIntro,
+                           double cueMix, double cueEnd, double duration, const QColor &color, QObject *parent)
+{
+    m_artist = artist;
+    m_title = title;
+    m_cueStart = cueStart;
+    m_cueIntro = cueIntro;
+    m_cueMix = cueMix;
+    m_cueEnd = cueEnd;
+    m_duration = duration;
+    m_progress = 0.0;
+    m_fileName = "";
+    m_color = color;
+    qDebug() << "PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+        m_cueMix << m_cueEnd << m_duration << m_color << ")";
 }
 
 PlaylistItem::~PlaylistItem()
 {
-    qDebug() << "PlaylistItem destructor called";
+    qDebug() << "~PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+        m_cueMix << m_cueEnd << m_duration << m_color << ")";
 }
 
 QString PlaylistItem::artist() const
@@ -151,4 +170,10 @@ void PlaylistItem::setColor(const QColor &newColor)
         m_color = newColor;
         emit colorChanged();
     }
+}
+
+void PlaylistItem::debug(QString message)
+{
+    qDebug() << "PlaylistItem::debug()" << message << m_artist << m_title << m_cueStart << m_cueIntro <<
+        m_cueMix << m_cueEnd << m_duration << m_progress << m_fileName << m_color;
 }
