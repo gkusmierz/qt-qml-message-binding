@@ -9,12 +9,14 @@ RESOURCES += \
     qml/qml.qrc
 
 SOURCES += \
+    src/libraryitem.cpp \
+    src/librarymodel.cpp \
     src/main.cpp \
-    src/playlistdao.cpp \
     src/playlistitem.cpp \
     src/playlistmodel.cpp
 
 HEADERS += \
-    src/playlistdao.h \
+    src/libraryitem.h \
+    src/librarymodel.h \
     src/playlistitem.h \
     src/playlistmodel.h

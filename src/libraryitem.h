@@ -1,10 +1,10 @@
-#ifndef PLAYLISTITEM_H
-#define PLAYLISTITEM_H
+#ifndef LIBRARYITEM_H
+#define LIBRARYITEM_H
 
 #include <QObject>
 #include <QColor>
 
-class PlaylistItem : public QObject {
+class LibraryItem : public QObject {
 
     Q_OBJECT
 
@@ -15,20 +15,18 @@ class PlaylistItem : public QObject {
     Q_PROPERTY(double cueMix READ cueMix WRITE setCueMix NOTIFY cueMixChanged)
     Q_PROPERTY(double cueEnd READ cueEnd WRITE setCueEnd NOTIFY cueEndChanged)
     Q_PROPERTY(double duration READ duration WRITE setDuration NOTIFY durationChanged)
-    Q_PROPERTY(double progress READ progress WRITE setProgress NOTIFY progressChanged)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 public:
-    PlaylistItem(QObject *parent = nullptr);
-    PlaylistItem(const PlaylistItem &other);
-    PlaylistItem(const QString &artist, const QString &title,
-                           double cueStart, double cueIntro, double cueMix,
-                           double cueEnd, double duration, const QColor &color,
-                           QObject *parent = nullptr);
+    LibraryItem(QObject *parent = nullptr);
+    LibraryItem(const LibraryItem &other);
+    LibraryItem(const QString &artist, const QString &title, const double &cueStart,
+                const double &cueIntro, const double &cueMix, const double &cueEnd,
+                const double &duration, const QColor &color, QObject *parent = nullptr);
 
-    ~PlaylistItem() override;
+    ~LibraryItem() override;
 
-    PlaylistItem &operator=(const PlaylistItem &other);
+    LibraryItem &operator=(const LibraryItem &other);
 
     QString artist() const;
     void setArtist(const QString &newArtist);
@@ -51,9 +49,6 @@ public:
     double duration() const;
     void setDuration(double newDuration);
 
-    double progress() const;
-    void setProgress(double newProgress);
-
     QString fileName() const;
     void setFileName(const QString &newFileName);
 
@@ -70,7 +65,6 @@ signals:
     void cueMixChanged();
     void cueEndChanged();
     void durationChanged();
-    void progressChanged();
     void fileNameChanged();
     void colorChanged();
 
@@ -82,9 +76,8 @@ private:
     double m_cueMix;
     double m_cueEnd;
     double m_duration;
-    double m_progress;
     QString m_fileName;
     QColor m_color;
 };
 
-#endif // PLAYLISTITEM_H
+#endif // LIBRARYITEM_H

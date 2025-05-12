@@ -1,7 +1,19 @@
 #include "playlistmodel.h"
 
 PlaylistModel::PlaylistModel(QObject *parent)
-    : QAbstractListModel(parent) {}
+    : QAbstractListModel(parent),
+      m_playlistItems()
+{
+    // Random seed initialization
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    qDebug() << "PlaylistModel::PlaylistModel()";
+}
+
+PlaylistModel::~PlaylistModel()
+{
+    qDebug() << "~PlaylistModel::PlaylistModel()";
+}
 
 int PlaylistModel::rowCount(const QModelIndex &parent) const {
     if (parent.isValid()) return 0;
@@ -21,44 +33,44 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
         return QVariant();
 
     switch (role) {
-        case ArtistRole:
-            return msgPtr->artist();
-        case TitleRole:
-            return msgPtr->title();
-        case CueStartRole:
-            return msgPtr->cueStart();
-        case CueIntroRole:
-            return msgPtr->cueIntro();
-        case CueMixRole:
-            return msgPtr->cueMix();
-        case CueEndRole:
-            return msgPtr->cueEnd();
-        case DurationRole:
-            return msgPtr->duration();
-        case ProgressRole:
-            return msgPtr->progress();
-        case FileNameRole:
-            return msgPtr->fileName();
-        case ColorRole:
-            return msgPtr->color();
-        default:
-            return QVariant();
+    case PlaylistArtistRole:
+        return msgPtr->artist();
+    case PlaylistTitleRole:
+        return msgPtr->title();
+    case PlaylistCueStartRole:
+        return msgPtr->cueStart();
+    case PlaylistCueIntroRole:
+        return msgPtr->cueIntro();
+    case PlaylistCueMixRole:
+        return msgPtr->cueMix();
+    case PlaylistCueEndRole:
+        return msgPtr->cueEnd();
+    case PlaylistDurationRole:
+        return msgPtr->duration();
+    case PlaylistProgressRole:
+        return msgPtr->progress();
+    case PlaylistFileNameRole:
+        return msgPtr->fileName();
+    case PlaylistColorRole:
+        return msgPtr->color();
+    default:
+        return QVariant();
     }
 }
 
 QHash<int, QByteArray> PlaylistModel::roleNames() const {
-    return {
-        { ArtistRole, "artist" },
-        { TitleRole, "title" },
-        { CueStartRole, "cueStart" },
-        { CueIntroRole, "cueIntro" },
-        { CueMixRole, "cueMix" },
-        { CueEndRole, "cueEnd" },
-        { DurationRole, "duration" },
-        { ProgressRole, "progress" },
-        { FileNameRole, "fileName" },
-        { ColorRole, "color" }
-    };
+    QHash<int, QByteArray> roles;
+    roles[PlaylistArtistRole] = "artist";
+    roles[PlaylistTitleRole] = "title";
+    roles[PlaylistCueStartRole] = "cueStart";
+    roles[PlaylistCueIntroRole] = "cueIntro";
+    roles[PlaylistCueMixRole] = "cueMix";
+    roles[PlaylistCueEndRole] = "cueEnd";
+    roles[PlaylistDurationRole] = "duration";
+    roles[PlaylistProgressRole] = "progress";
+    roles[PlaylistFileNameRole] = "fileName";
+    roles[PlaylistColorRole] = "color";
+    return roles;
 }
 
 void PlaylistModel::addPlaylistItem(const QString &artist, const QString &title,
@@ -84,7 +96,7 @@ void PlaylistModel::random(int index)
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex, { ColorRole, ProgressRole });
+    emit dataChanged(modelIndex, modelIndex, { PlaylistColorRole, PlaylistProgressRole });
 }
 
 void PlaylistModel::randomProgress()
@@ -98,7 +110,7 @@ void PlaylistModel::randomProgress()
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex, { ProgressRole });
+    emit dataChanged(modelIndex, modelIndex, { PlaylistProgressRole });
 }
 
 void PlaylistModel::randomColor()
@@ -113,5 +125,5 @@ void PlaylistModel::randomColor()
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
-    emit dataChanged(modelIndex, modelIndex, { ColorRole });
+    emit dataChanged(modelIndex, modelIndex, { PlaylistColorRole });
 }

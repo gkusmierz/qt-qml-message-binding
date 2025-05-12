@@ -1,8 +1,8 @@
-#include "playlistitem.h"
+#include "libraryitem.h"
 
 #include <QDebug>
 
-PlaylistItem::PlaylistItem(QObject *parent)
+LibraryItem::LibraryItem(QObject *parent)
     : QObject(parent),
       m_artist(""),
       m_title(""),
@@ -11,15 +11,14 @@ PlaylistItem::PlaylistItem(QObject *parent)
       m_cueMix(0.0),
       m_cueEnd(0.0),
       m_duration(0.0),
-      m_progress(0.0),
       m_fileName(""),
       m_color(Qt::red)
 {
-    qDebug() << "PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+    qDebug() << "LibraryItem::LibraryItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
         m_cueMix << m_cueEnd << m_duration << m_color << ")";
 }
 
-PlaylistItem::PlaylistItem(const PlaylistItem &other)
+LibraryItem::LibraryItem(const LibraryItem &other)
 {
     m_artist = other.m_artist;
     m_title = other.m_title;
@@ -28,15 +27,15 @@ PlaylistItem::PlaylistItem(const PlaylistItem &other)
     m_cueMix = other.m_cueMix;
     m_cueEnd = other.m_cueEnd;
     m_duration = other.m_duration;
-    m_progress = other.m_progress;
     m_fileName = other.m_fileName;
     m_color = other.m_color;
 
     setParent(other.parent());
 }
 
-PlaylistItem::PlaylistItem(const QString &artist, const QString &title, double cueStart, double cueIntro,
-                           double cueMix, double cueEnd, double duration, const QColor &color, QObject *parent)
+LibraryItem::LibraryItem(const QString &artist, const QString &title, const double &cueStart,
+                         const double &cueIntro, const double &cueMix, const double &cueEnd,
+                         const double &duration, const QColor &color, QObject *parent)
 {
     m_artist = artist;
     m_title = title;
@@ -45,20 +44,22 @@ PlaylistItem::PlaylistItem(const QString &artist, const QString &title, double c
     m_cueMix = cueMix;
     m_cueEnd = cueEnd;
     m_duration = duration;
-    m_progress = 0.0;
     m_fileName = "";
     m_color = color;
-    qDebug() << "PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+
+    setParent(parent);
+
+    qDebug() << "LibraryItem::LibraryItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
         m_cueMix << m_cueEnd << m_duration << m_color << ")";
 }
 
-PlaylistItem::~PlaylistItem()
+LibraryItem::~LibraryItem()
 {
-    qDebug() << "~PlaylistItem::PlaylistItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
+    qDebug() << "~LibraryItem::LibraryItem(" << m_artist << m_title << m_cueStart << m_cueIntro <<
         m_cueMix << m_cueEnd << m_duration << m_color << ")";
 }
 
-PlaylistItem &PlaylistItem::operator=(const PlaylistItem &other)
+LibraryItem &LibraryItem::operator=(const LibraryItem &other)
 {
     if (this != &other) {
         m_artist = other.m_artist;
@@ -68,19 +69,18 @@ PlaylistItem &PlaylistItem::operator=(const PlaylistItem &other)
         m_cueMix = other.m_cueMix;
         m_cueEnd = other.m_cueEnd;
         m_duration = other.m_duration;
-        m_progress = other.m_progress;
         m_fileName = other.m_fileName;
         m_color = other.m_color;
     }
     return *this;
 }
 
-QString PlaylistItem::artist() const
+QString LibraryItem::artist() const
 {
     return m_artist;
 }
 
-void PlaylistItem::setArtist(const QString &newArtist)
+void LibraryItem::setArtist(const QString &newArtist)
 {
     if (m_artist != newArtist) {
         m_artist = newArtist;
@@ -88,12 +88,12 @@ void PlaylistItem::setArtist(const QString &newArtist)
     }
 }
 
-QString PlaylistItem::title() const
+QString LibraryItem::title() const
 {
     return m_title;
 }
 
-void PlaylistItem::setTitle(const QString &newTitle)
+void LibraryItem::setTitle(const QString &newTitle)
 {
     if (m_title != newTitle) {
         m_title = newTitle;
@@ -101,12 +101,12 @@ void PlaylistItem::setTitle(const QString &newTitle)
     }
 }
 
-double PlaylistItem::cueStart() const
+double LibraryItem::cueStart() const
 {
     return m_cueStart;
 }
 
-void PlaylistItem::setCueStart(double newCueStart)
+void LibraryItem::setCueStart(double newCueStart)
 {
     if (m_cueStart != newCueStart) {
         m_cueStart = newCueStart;
@@ -114,12 +114,12 @@ void PlaylistItem::setCueStart(double newCueStart)
     }
 }
 
-double PlaylistItem::cueIntro() const
+double LibraryItem::cueIntro() const
 {
     return m_cueIntro;
 }
 
-void PlaylistItem::setCueIntro(double newCueIntro)
+void LibraryItem::setCueIntro(double newCueIntro)
 {
     if (m_cueIntro != newCueIntro) {
         m_cueIntro = newCueIntro;
@@ -127,12 +127,12 @@ void PlaylistItem::setCueIntro(double newCueIntro)
     }
 }
 
-double PlaylistItem::cueMix() const
+double LibraryItem::cueMix() const
 {
     return m_cueMix;
 }
 
-void PlaylistItem::setCueMix(double newCueMix)
+void LibraryItem::setCueMix(double newCueMix)
 {
     if (m_cueMix != newCueMix) {
         m_cueMix = newCueMix;
@@ -140,12 +140,12 @@ void PlaylistItem::setCueMix(double newCueMix)
     }
 }
 
-double PlaylistItem::cueEnd() const
+double LibraryItem::cueEnd() const
 {
     return m_cueEnd;
 }
 
-void PlaylistItem::setCueEnd(double newCueEnd)
+void LibraryItem::setCueEnd(double newCueEnd)
 {
     if (m_cueEnd != newCueEnd) {
         m_cueEnd = newCueEnd;
@@ -153,12 +153,12 @@ void PlaylistItem::setCueEnd(double newCueEnd)
     }
 }
 
-double PlaylistItem::duration() const
+double LibraryItem::duration() const
 {
     return m_duration;
 }
 
-void PlaylistItem::setDuration(double newDuration)
+void LibraryItem::setDuration(double newDuration)
 {
     if (m_duration != newDuration) {
         m_duration = newDuration;
@@ -166,25 +166,12 @@ void PlaylistItem::setDuration(double newDuration)
     }
 }
 
-double PlaylistItem::progress() const
-{
-    return m_progress;
-}
-
-void PlaylistItem::setProgress(double newProgress)
-{
-    if (m_progress != newProgress) {
-        m_progress = newProgress;
-        emit progressChanged();
-    }
-}
-
-QString PlaylistItem::fileName() const
+QString LibraryItem::fileName() const
 {
     return m_fileName;
 }
 
-void PlaylistItem::setFileName(const QString &newFileName)
+void LibraryItem::setFileName(const QString &newFileName)
 {
     if (m_fileName != newFileName) {
         m_fileName = newFileName;
@@ -192,12 +179,12 @@ void PlaylistItem::setFileName(const QString &newFileName)
     }
 }
 
-QColor PlaylistItem::color() const
+QColor LibraryItem::color() const
 {
     return m_color;
 }
 
-void PlaylistItem::setColor(const QColor &newColor)
+void LibraryItem::setColor(const QColor &newColor)
 {
     if (m_color != newColor) {
         m_color = newColor;
@@ -205,8 +192,8 @@ void PlaylistItem::setColor(const QColor &newColor)
     }
 }
 
-void PlaylistItem::debug(QString message)
+void LibraryItem::debug(QString message)
 {
-    qDebug() << "PlaylistItem::debug()" << message << m_artist << m_title << m_cueStart << m_cueIntro <<
-        m_cueMix << m_cueEnd << m_duration << m_progress << m_fileName << m_color;
+    qDebug() << "LibraryItem::debug()" << message << m_artist << m_title << m_cueStart <<
+        m_cueIntro << m_cueMix << m_cueEnd << m_duration << m_fileName << m_color;
 }

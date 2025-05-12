@@ -54,7 +54,7 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        playlist.random(model.index);
+                        playlist.random(model.index)
                     }
                 }
             }

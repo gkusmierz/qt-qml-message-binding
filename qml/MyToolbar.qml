@@ -13,17 +13,13 @@ RowLayout {
     Button {
         text: "Add"
         onClicked: {
-            for (var i = 1; i < 10; i++) {
-            var randomItem = dao.randomItem();
-            //console.log(randomItem);
+            var randomItem = library.randomItem();
+            console.log(randomItem)
             playlist.addPlaylistItem(randomItem.artist, randomItem.title, 0.0, 0.0, 0.0, 0.0, randomItem.duration, "red");
-            }
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
-        palette {
-                                          button: "yellow"
-                                      }
+        font.bold: true
     }
     Button {
         text: "Random\nProgress"
@@ -32,6 +28,7 @@ RowLayout {
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
+        font.bold: true
     }
     Button {
         text: "Random\nColor"
@@ -40,6 +37,7 @@ RowLayout {
         }
         Layout.fillHeight: true
         Layout.preferredWidth: 100
+        font.bold: true
     }
     Item {
         Layout.fillWidth: true
