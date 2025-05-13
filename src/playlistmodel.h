@@ -2,7 +2,6 @@
 #define PLAYLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QSharedPointer>
 #include <QList>
 
 #include "playlistitem.h"
@@ -40,7 +39,7 @@ public:
     Q_INVOKABLE void randomColor();
 
 private:
-    QList<QSharedPointer<PlaylistItem>> m_playlistItems;
+    QList<PlaylistItem*> m_playlistItems;
 };
 
 #endif // PLAYLISTMODEL_H

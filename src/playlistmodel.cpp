@@ -21,11 +21,11 @@ int PlaylistModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid() || index.row() < 0 || index.row() >= m_playlistItems.size())
+    if (index.row() < 0 || index.row() > m_playlistItems.count())
         return QVariant();
 
     const QSharedPointer<PlaylistItem> &msgPtr = m_playlistItems[index.row()];
-    
+
     // Check for null pointer before accessing it
     if (!msgPtr) {
         qWarning() << "PlaylistModel::data - Null playlist item at index:" << index.row();
@@ -37,6 +37,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
 
     switch (role) {
     case PlaylistArtistRole:
+
         return msgPtr->artist();
     case PlaylistTitleRole:
         return msgPtr->title();
@@ -95,15 +96,15 @@ void PlaylistModel::addPlaylistItem(const QString &artist,
         // Create local copies of all values to ensure complete independence from source data
         QString artistCopy = QString(artist); // Force a deep copy
         QString titleCopy = QString(title);   // Force a deep copy
-        
+
         // Color needs special handling to ensure it's a new instance
         QColor colorCopy(color.red(), color.green(), color.blue(), color.alpha());
-        
+
         // Create a new shared pointer with proper exception handling
         // Use our copied values to ensure complete independence
         auto newItem = QSharedPointer<PlaylistItem>::create(
             artistCopy, titleCopy, cueStart, cueIntro, cueMix, cueEnd, duration, colorCopy);
-        
+
         // Add only if the item was created successfully
         if (newItem) {
             // tell Qt we're about to add one row at the end:
@@ -151,7 +152,7 @@ void PlaylistModel::randomProgress()
 {
     // Check if there are any items
     if (m_playlistItems.isEmpty()) return;
-    
+
     // Select randomly one of items from m_playlistItems
     int index = rand() % m_playlistItems.size();
 
@@ -174,7 +175,7 @@ void PlaylistModel::randomColor()
 {
     // Check if there are any items
     if (m_playlistItems.isEmpty()) return;
-    
+
     // Select randomly one of items from m_playlistItems
     int index = rand() % m_playlistItems.size();
 

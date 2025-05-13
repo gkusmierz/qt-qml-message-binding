@@ -2,9 +2,7 @@
 #define LIBRARYMODEL_H
 
 #include <QAbstractListModel>
-#include <QObject>
 #include <QSqlDatabase>
-#include <QSharedPointer>
 #include <QList>
 
 #include "libraryitem.h"
@@ -35,7 +33,7 @@ public:
 
     Q_INVOKABLE QObject* randomItem();
     Q_INVOKABLE QObject* getItem(int index) const;
-    
+
     // Keep track of the last accessed item to prevent premature destruction
     Q_INVOKABLE void releaseQmlReferences();
 
@@ -44,11 +42,11 @@ signals:
 private:
     QString m_sqlitePath;
     QList<QSharedPointer<LibraryItem>> m_libraryItems;
-    
+
     // Keep a cache of recently accessed items to prevent premature destruction
     // This ensures objects stay alive while QML might still be accessing them
     QList<QSharedPointer<LibraryItem>> m_recentlyAccessedItems;
-    
+
     // Maximum number of recently accessed items to keep alive
     static const int MAX_RECENT_ITEMS = 10;
 
