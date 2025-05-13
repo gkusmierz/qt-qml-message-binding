@@ -4,6 +4,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QColor>
+#include <QQmlEngine>
 
 LibraryModel::LibraryModel(const QString &sqlitePath, QObject *parent)
     : QAbstractListModel(parent),
@@ -33,8 +34,8 @@ QVariant LibraryModel::data(const QModelIndex &index, int role) const {
 
     const QSharedPointer<LibraryItem> &msgPtr = m_libraryItems[index.row()];
 
-    QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
-    msgPtr->debug(debugMsg);
+    // QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
+    // msgPtr->debug(debugMsg);
 
     if (!msgPtr)
         return QVariant();
@@ -84,14 +85,100 @@ QObject *LibraryModel::randomItem()
         return nullptr;
     }
 
+    // Get a random valid index
     int randomIndex = rand() % m_libraryItems.size();
-    return getItem(randomIndex);
+    
+    if (randomIndex >= 0 && randomIndex < m_libraryItems.size()) {
+        // Get the item from the library
+        QSharedPointer<LibraryItem> item = m_libraryItems[randomIndex];
+        
+        // Validate the pointer
+        if (!item) {
+            qWarning().noquote() << "Null library item at index" << randomIndex;
+            return nullptr;
+        }
+        
+        // Add to the recently accessed items queue to keep it alive
+        // This is a critical step to ensure the object doesn't get destroyed
+        // while QML is still using it
+        m_recentlyAccessedItems.append(item);
+
+        // Tell QML that C++ still owns the object
+        QQmlEngine::setObjectOwnership(item.data(), QQmlEngine::CppOwnership);
+        
+        // Keep the queue at a reasonable size
+        while (m_recentlyAccessedItems.size() > MAX_RECENT_ITEMS) {
+            // Remove the oldest item from the queue
+            m_recentlyAccessedItems.removeFirst();
+        }
+        
+        qDebug() << "LibraryModel::randomItem returning" << item->artist()
+                 << item->title();
+                 
+        // Return raw pointer, but it's kept alive by item in m_recentlyAccessedItems
+        return item.data();
+    }
+    
+    return nullptr;
 }
 
 QObject *LibraryModel::getItem(int index) const {
-    if (index >= 0 && index < m_libraryItems.size())
-        return m_libraryItems[index].data(); // return raw QObject* for QML
-    return nullptr;
+    // Safety check for index bounds
+    if (index < 0 || index >= m_libraryItems.size()) {
+        qWarning().noquote() << "Library item index out of bounds:" << index;
+        return nullptr;
+    }
+    
+    // Get the item from the library
+    QSharedPointer<LibraryItem> item = m_libraryItems[index];
+    
+    // Validate the pointer
+    if (!item) {
+        qWarning().noquote() << "Null library item at index" << index;
+        return nullptr;
+    }
+    
+    // Cast away constness to update the recently accessed items
+    LibraryModel* self = const_cast<LibraryModel*>(this);
+    
+    // Add to the recently accessed items queue to keep it alive
+    self->m_recentlyAccessedItems.append(item);
+
+    // Tell QML that C++ still owns the object
+    QQmlEngine::setObjectOwnership(item.data(), QQmlEngine::CppOwnership);
+    
+    // Keep the queue at a reasonable size
+    while (self->m_recentlyAccessedItems.size() > MAX_RECENT_ITEMS) {
+        // Remove the oldest item from the queue
+        self->m_recentlyAccessedItems.removeFirst();
+    }
+    
+    qDebug() << "LibraryModel::getItem returning" << item->artist()
+             << item->title();
+             
+    // Return raw pointer, but it's kept alive by item in m_recentlyAccessedItems
+    return item.data();
+}
+
+void LibraryModel::releaseQmlReferences()
+{
+    // Log what we're releasing
+    if (!m_recentlyAccessedItems.isEmpty()) {
+        QStringList names;
+        for (const QSharedPointer<LibraryItem> &item : m_recentlyAccessedItems) {
+            if (!item.isNull()) {
+                names << QString("%1 - %2").arg(item->artist(), item->title());
+            }
+        }
+        
+        if (!names.isEmpty()) {
+            qDebug() << "LibraryModel::releaseQmlReferences - clearing" << names.size()
+                     << "items:" << names.join(", ");
+        }
+    }
+    
+    // Clear all recently accessed items
+    m_recentlyAccessedItems.clear();
 }
 
 QSqlDatabase LibraryModel::openDb(const QString &path, const char *connectionName) const

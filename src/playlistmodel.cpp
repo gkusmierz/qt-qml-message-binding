@@ -25,12 +25,15 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
         return QVariant();
 
     const QSharedPointer<PlaylistItem> &msgPtr = m_playlistItems[index.row()];
-
-    QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
-    msgPtr->debug(debugMsg);
-
-    if (!msgPtr)
+    
+    // Check for null pointer before accessing it
+    if (!msgPtr) {
+        qWarning() << "PlaylistModel::data - Null playlist item at index:" << index.row();
         return QVariant();
+    }
+
+    // QString debugMsg = QString("%1/%2").arg(index.row()).arg(role);
+    // msgPtr->debug(debugMsg);
 
     switch (role) {
     case PlaylistArtistRole:
@@ -73,26 +76,71 @@ QHash<int, QByteArray> PlaylistModel::roleNames() const {
     return roles;
 }
 
-void PlaylistModel::addPlaylistItem(const QString &artist, const QString &title,
-                                    double cueStart, double cueIntro, double cueMix,
-                                    double cueEnd, double duration, const QColor &color)
+void PlaylistModel::addPlaylistItem(const QString &artist,
+                                    const QString &title,
+                                    double cueStart,
+                                    double cueIntro,
+                                    double cueMix,
+                                    double cueEnd,
+                                    double duration,
+                                    const QColor &color)
 {
-    beginInsertRows(QModelIndex(), m_playlistItems.size(), m_playlistItems.size());
+    // Validate inputs before creating a new item
+    if (artist.isEmpty() && title.isEmpty()) {
+        qWarning() << "PlaylistModel::addPlaylistItem - Empty artist and title";
+        return;
+    }
 
-    m_playlistItems.append(QSharedPointer<PlaylistItem>::create(
-        artist, title, cueStart, cueIntro, cueMix, cueEnd, duration, "red"));
+    try {
+        // Create local copies of all values to ensure complete independence from source data
+        QString artistCopy = QString(artist); // Force a deep copy
+        QString titleCopy = QString(title);   // Force a deep copy
+        
+        // Color needs special handling to ensure it's a new instance
+        QColor colorCopy(color.red(), color.green(), color.blue(), color.alpha());
+        
+        // Create a new shared pointer with proper exception handling
+        // Use our copied values to ensure complete independence
+        auto newItem = QSharedPointer<PlaylistItem>::create(
+            artistCopy, titleCopy, cueStart, cueIntro, cueMix, cueEnd, duration, colorCopy);
+        
+        // Add only if the item was created successfully
+        if (newItem) {
+            // tell Qt we're about to add one row at the end:
+            const int row = m_playlistItems.count();
+            beginInsertRows(QModelIndex(), row, row);
+            m_playlistItems.append(newItem);
+            endInsertRows();
 
-    endInsertRows();
+            qDebug() << "PlaylistModel::addPlaylistItem - Added new item:"
+                     << artistCopy << titleCopy << duration;
+        }
+    } catch (const std::exception &e) {
+        qWarning() << "PlaylistModel::addPlaylistItem - Exception creating item:" << e.what();
+    }
 }
 
 void PlaylistModel::random(int index)
 {
+    // Check if index is valid before accessing the shared pointer
+    if (index < 0 || index >= m_playlistItems.size()) {
+        qWarning() << "PlaylistModel::random - Invalid index:" << index;
+        return;
+    }
+
+    // Check if the shared pointer is valid
+    const QSharedPointer<PlaylistItem> &item = m_playlistItems[index];
+    if (!item) {
+        qWarning() << "PlaylistModel::random - Null playlist item at index:" << index;
+        return;
+    }
+
     // set random progress between 0.0 and 1.0
-    m_playlistItems[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
+    item->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
 
     // set random color
     QColor randomColor(rand() % 256, rand() % 256, rand() % 256);
-    m_playlistItems[index]->setColor(randomColor);
+    item->setColor(randomColor);
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
@@ -101,12 +149,21 @@ void PlaylistModel::random(int index)
 
 void PlaylistModel::randomProgress()
 {
-    // select randomly on of items from m_messages
+    // Check if there are any items
     if (m_playlistItems.isEmpty()) return;
+    
+    // Select randomly one of items from m_playlistItems
     int index = rand() % m_playlistItems.size();
 
+    // Check if the shared pointer is valid
+    const QSharedPointer<PlaylistItem> &item = m_playlistItems[index];
+    if (!item) {
+        qWarning() << "PlaylistModel::randomProgress - Null playlist item at index:" << index;
+        return;
+    }
+
     // set random progress between 0.0 and 1.0
-    m_playlistItems[index]->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
+    item->setProgress(static_cast<qreal>(rand()) / RAND_MAX);
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
@@ -115,13 +172,22 @@ void PlaylistModel::randomProgress()
 
 void PlaylistModel::randomColor()
 {
-    // select randomly on of items from m_messages
+    // Check if there are any items
     if (m_playlistItems.isEmpty()) return;
+    
+    // Select randomly one of items from m_playlistItems
     int index = rand() % m_playlistItems.size();
+
+    // Check if the shared pointer is valid
+    const QSharedPointer<PlaylistItem> &item = m_playlistItems[index];
+    if (!item) {
+        qWarning() << "PlaylistModel::randomColor - Null playlist item at index:" << index;
+        return;
+    }
 
     // set random color
     QColor randomColor(rand() % 256, rand() % 256, rand() % 256);
-    m_playlistItems[index]->setColor(randomColor);
+    item->setColor(randomColor);
 
     // emit dataChanged signal to notify the view
     QModelIndex modelIndex = this->index(index);
