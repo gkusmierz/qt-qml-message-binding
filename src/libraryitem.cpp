@@ -38,6 +38,10 @@ LibraryItem::LibraryItem(const QString &artist, const QString &title, const doub
                          const double &duration, const QColor &color, QObject *parent)
 {
     m_artist = artist;
+    if (m_artist.isEmpty() || m_artist == " ") {
+        m_artist = "Unknown Artist";
+    }
+
     m_title = title;
     m_cueStart = cueStart;
     m_cueIntro = cueIntro;

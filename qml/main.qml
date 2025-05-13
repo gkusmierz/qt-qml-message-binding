@@ -54,7 +54,16 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        playlist.random(model.index)
+                        // Validate index before calling random
+                        if (model && model.index !== undefined && model.index >= 0) {
+                            // Perform the playlist item randomization
+                            playlist.random(model.index)
+                            
+                            // Always ensure we clear any library references
+                            // even though this action doesn't directly use library items
+                            // This ensures we have a consistent cleanup pattern
+                            library.releaseQmlReferences()
+                        }
                     }
                 }
             }

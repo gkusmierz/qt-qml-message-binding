@@ -13,23 +13,30 @@ RowLayout {
     Button {
         text: "Add"
         onClicked: {
-            for (var i = 0; i < 25; i++) {
+            for (var i = 0; i < 1000; i++) {
+                // Get a random item from library
+                var randomItem = library.randomItem();
 
+                if (randomItem !== null) {
+                    try {
+                        // Make a copy of the values we need before adding to the playlist
+                        var artist = randomItem.artist;
+                        var title = randomItem.title;
+                        var duration = randomItem.duration;
 
+                        console.log(randomItem);
 
-                try {
-                    var randomItem = library.randomItem();
-                    console.log(randomItem)
-                    playlist.addPlaylistItem(randomItem.artist, randomItem.title, 0.0, 0.0, 0.0, 0.0, randomItem.duration, "red");
-                } catch (error) {
-                  console.error(error);
-                  // Expected output: ReferenceError: nonExistentFunction is not defined
-                  // (Note: the exact output may be browser-dependent)
+                        // Pass values (not the object reference) to the playlist
+                        playlist.addPlaylistItem(artist, title, 0.0, 0.0, 0.0, 0.0, duration, "red");
+                    } finally {
+                        // Always release library references when done
+                        // This ensures proper cleanup of the shared pointer in C++
+                        library.releaseQmlReferences();
+
+                        // Also clear the JS reference
+                        randomItem = null;
+                    }
                 }
-
-
-
-
             }
         }
         Layout.fillHeight: true
