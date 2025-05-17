@@ -16,27 +16,14 @@ RowLayout {
             for (var i = 0; i < 1000; i++) {
                 // Get a random item from library
                 var randomItem = library.randomItem();
+                var artist = randomItem.artist;
+                var title = randomItem.title;
+                var duration = randomItem.duration;
 
-                if (randomItem !== null) {
-                    try {
-                        // Make a copy of the values we need before adding to the playlist
-                        var artist = randomItem.artist;
-                        var title = randomItem.title;
-                        var duration = randomItem.duration;
+                console.log(randomItem);
 
-                        console.log(randomItem);
-
-                        // Pass values (not the object reference) to the playlist
-                        playlist.addPlaylistItem(artist, title, 0.0, 0.0, 0.0, 0.0, duration, "red");
-                    } finally {
-                        // Always release library references when done
-                        // This ensures proper cleanup of the shared pointer in C++
-                        library.releaseQmlReferences();
-
-                        // Also clear the JS reference
-                        randomItem = null;
-                    }
-                }
+                // Pass values (not the object reference) to the playlist
+                playlist.addPlaylistItem(artist, title, 0.0, 0.0, 0.0, 0.0, duration, "red");
             }
         }
         Layout.fillHeight: true

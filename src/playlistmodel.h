@@ -32,14 +32,15 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void addPlaylistItem(const QString &artist, const QString &title,
-                                     double cueStart, double cueIntro, double cueMix,
-                                     double cueEnd, double duration, const QColor &color);
+                                     const double &cueStart, const double &cueIntro,
+                                     const double &cueMix, const double &cueEnd,
+                                     const double &duration, const QColor &color);
     Q_INVOKABLE void random(int index);
     Q_INVOKABLE void randomProgress();
     Q_INVOKABLE void randomColor();
 
 private:
-    QList<PlaylistItem*> m_playlistItems;
+    QList<QSharedPointer<PlaylistItem>> m_playlistItems;
 };
 
 #endif // PLAYLISTMODEL_H
