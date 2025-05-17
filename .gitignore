@@ -58,3 +58,4 @@ build/
 .qtc_clangd/
 qt-qml-message-binding.app /
 *.pro.user
+.idea/
